@@ -78,7 +78,7 @@ int main()
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
-			//Local velocity variable used to calculate new velocity
+			//Local velocity variable used to calculate velocity between all other particles
 			sf::Vector2f velocity = { 0.0f, 0.0f };
 			for (int j = 0; j < PARTICLECOUNT; j++)
 			{
@@ -87,18 +87,19 @@ int main()
 					continue;
 				//Get distance from two particles
 				sf::Vector2f distance = particles[j].getPosition() - particles[i].getPosition();
-				//Calculating DOT product
-				float dot = (distance.x * distance.x + distance.y * distance.y) + 3e4;
-				//If the dot product is valid
-				if (dot > 0.1f)
+				//Calculating distance squared
+				float dSquared = (distance.x * distance.x + distance.y * distance.y) + 3e4;
+				//If particles are not together
+				if (dSquared > 0.1f)
 				{
 					//Get inverse distance
-					float inverseDistance = pow(1.0f / sqrtf(dot), 3);
+					float distSixth = dSquared * dSquared * dSquared;
+					float inverseDist = 1.0f / sqrtf(distSixth);
 					//Add to velocity
-					velocity += distance * inverseDistance;
+					velocity += distance * inverseDist;
 				}
 			}
-			//Calculate new velocity
+			//Calculate new velocity for original particle
 			sf::Vector2f newVelocity = (TIMESTEP * velocity * RESISTANCE) + particles[i].getVelocity();
 			//Set Velocity
 			particles[i].setVelocity(newVelocity);
