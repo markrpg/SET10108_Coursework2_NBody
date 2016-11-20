@@ -4,10 +4,13 @@
 class Particle : public sf::CircleShape
 {
 public:
+
+	//Local Velocity variable
+	sf::Vector2f velocity;
+
 	Particle(float arg) : CircleShape(arg) {};
 	void InitParticle();
-	void setVelocity(float Velocityx, float Velocityy);
-	float Particle::getVelocityx();
-	float Particle::getVelocityy();
+	void setVelocity(sf::Vector2f);
+	sf::Vector2f Particle::getVelocity();
 };
 
