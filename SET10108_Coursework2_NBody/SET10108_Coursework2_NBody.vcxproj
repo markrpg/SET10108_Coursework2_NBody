@@ -136,6 +136,7 @@
       <AdditionalIncludeDirectories>C:\Users\Mark\Documents\Visual Studio 2015\Libraries\SFML-2.4.1\include</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -1,4 +1,6 @@
-/// SET10108_Coursework2_NBody.cpp : Defines the entry point for the console application.
+/// main.cpp
+/// SET10108 University Coursework
+/// Mark McLaughlin - 40200606
 
 #include "stdafx.h"
 #include <vector>
@@ -11,6 +13,8 @@
 #include <iostream>  
 #include <fstream>
 #include <math.h>
+#include <omp.h>
+#include <thread>
 
 using namespace std;
 using namespace std::chrono;
@@ -48,6 +52,8 @@ int main()
 	default_random_engine e(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count());
 	//Uniform distribution
 	uniform_real_distribution<float> float_dist(0, SCREENSIZE);
+	//Get number of supported threads for OpenMP
+	auto num_threads = thread::hardware_concurrency();
 
 	//initialise particles
 	for (int i = 0; i < PARTICLECOUNT; i++)
@@ -68,6 +74,7 @@ int main()
 		//Start Recording time
 		auto start = system_clock::now();
 
+#pragma omp parallel for num_threads(num_threads)
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{

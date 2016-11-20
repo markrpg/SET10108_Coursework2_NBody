@@ -3,9 +3,6 @@
 //SFML Graphics library for displaying particles
 #include <SFML\Graphics.hpp>
 
-//Local Velocity variable
-float velocityx;
-float velocityy;
 
 //Function to initialise default particle settings
 void Particle::InitParticle()
@@ -15,15 +12,15 @@ void Particle::InitParticle()
 	//Set Scale
 	setScale(0.01, 0.01);
 	//Set velocity by default
-	velocityx = 0.0f;
-	velocityy = 0.0f;
+	velocity = { 0,0 };
+	Transformable t;
+	velocity = t.getPosition();
 }
 
+
+
 //Set Velocity
-void Particle::setVelocity(float Velocityx, float Velocityy) { velocityx = Velocityx; velocityy = Velocityy; }
+void Particle::setVelocity(sf::Vector2f Velocity) { velocity = Velocity; }
 
-//Get Velocity x
-float Particle::getVelocityx() { return velocityx; }
-
-//Get Velocity y
-float Particle::getVelocityy() { return velocityy; }
+//Get Velocity
+sf::Vector2f Particle::getVelocity() { return velocity; }
