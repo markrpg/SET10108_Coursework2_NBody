@@ -16,10 +16,12 @@ using namespace std;
 using namespace std::chrono;
 
 //Global Variables
-constexpr unsigned int PARTICLECOUNT = 4096;
-constexpr int ITERATIONS = 100;
+//Number of particles in the scene
+constexpr unsigned int PARTICLECOUNT = 1024;
+//Number of iterations in the scene
+constexpr int ITERATIONS = 10000;
 constexpr int SCREENSIZE = 800;
-constexpr float TIMESTEP = 10.0f;
+constexpr float TIMESTEP = 500.0f;
 constexpr float RESISTANCE = 0.99f;
 
 //Function to update display of particles
@@ -71,7 +73,7 @@ int main()
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
-			//Local velocity variable used to calculate new velocity
+			//Local velocity variable used to calculate velocity between all other particles
 			sf::Vector2f velocity = {0.0f, 0.0f};
 			for (int j = 0; j < PARTICLECOUNT; j++)
 			{
@@ -80,18 +82,19 @@ int main()
 					continue;
 				//Get distance from two particles
 				sf::Vector2f distance = particles[j].getPosition() - particles[i].getPosition();
-				//Calculating DOT product
-				float dot = (distance.x * distance.x + distance.y * distance.y) + 3e4;		 
-				//If the dot product is valid
-				if (dot > 0.1f)
+				//Calculating distance squared
+				float dSquared = (distance.x * distance.x + distance.y * distance.y) + 3e4;
+				//If particles are not together
+				if (dSquared > 0.1f)
 				{
 					//Get inverse distance
-					float inverseDistance = pow(1.0f / sqrtf(dot), 3);
+					float distSixth = dSquared * dSquared * dSquared;
+					float inverseDist = 1.0f / sqrtf(distSixth);
 					//Add to velocity
-					velocity += distance * inverseDistance;
+					velocity += distance * inverseDist;
 				}
 			}
-			//Calculate new velocity
+			//Calculate new velocity for original particle
 			sf::Vector2f newVelocity = (TIMESTEP * velocity * RESISTANCE) + particles[i].getVelocity();
 			//Set Velocity
 			particles[i].setVelocity(newVelocity);
