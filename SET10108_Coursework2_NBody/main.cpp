@@ -81,12 +81,12 @@ int main()
 	//Keep count of iterations
 	int count = 0;
 
-	while (window.isOpen() && count < ITERATIONS + 5)
+	while (window.isOpen() && count < ITERATIONS)
 	{
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
 
-#pragma omp parallel for num_threads(8)
+#pragma omp parallel for num_threads(4)
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
@@ -130,7 +130,7 @@ int main()
 			//Output iteration benchmark in ms
 			auto end = std::chrono::high_resolution_clock::now();
 			auto total = roundf((std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 0.000001) * 100) / 100;
-			cout << endl << "Iteration #" << (count-5) << " Benchmark MS: " << total << endl;
+			cout << endl << "Iteration #" << (count) << " Benchmark MS: " << total << endl;
 			data << total << endl;
 		}
 	}
