@@ -1,4 +1,3 @@
-ain.cpp
 /// SET10108 University Coursework
 /// Mark McLaughlin - 40200606
 
@@ -13,7 +12,6 @@ ain.cpp
 #include <iostream>  
 #include <fstream>
 #include <math.h>
-#include <omp.h>
 #include <thread>
 
 using namespace std;
