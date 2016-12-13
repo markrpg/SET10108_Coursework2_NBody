@@ -18,7 +18,7 @@ using namespace std;
 using namespace std::chrono;
 
 //Global Variables
-constexpr unsigned int PARTICLECOUNT = 512;
+constexpr unsigned int PARTICLECOUNT = 4096;
 constexpr int ITERATIONS = 100;
 constexpr int SCREENSIZE = 800;
 constexpr float TIMESTEP = 10.0f;
@@ -79,7 +79,7 @@ int main()
 	//Keep count of iterations
 	int count = 0;
 
-	while (window.isOpen() && count < ITERATIONS + 5)
+	while (window.isOpen() && count < ITERATIONS)
 	{
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
@@ -123,13 +123,11 @@ int main()
 		//updateDisplay(window, &particles);
 		//Keep iteration count
 		count++;
-		if (count > 5) {
-			//Output iteration benchmark in ms
-			auto end = std::chrono::high_resolution_clock::now();
-			auto total = roundf((std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 0.000001) * 100) / 100;
-			cout << endl << "Iteration #" << (count - 5) << " Benchmark MS: " << total << endl;
-			data << total << endl;
-		}
+		//Output iteration benchmark in ms
+		auto end = std::chrono::high_resolution_clock::now();
+		auto total = roundf((std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 0.000001) * 100) / 100;
+		cout << endl << "Iteration #" << (count) << " Benchmark MS: " << total << endl;
+		data << total << endl;
 	}
 
 
