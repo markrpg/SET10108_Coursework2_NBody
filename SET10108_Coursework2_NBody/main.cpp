@@ -92,24 +92,17 @@ int main()
 			float vy = 0.0f;
 			for (int j = 0; j < PARTICLECOUNT; j++)
 			{
-				//Dont count same particle
-				if (i == j)
-					continue;
 				//Get distance from two particles
 				float dx = particles[j].x - particles[i].x;
 				float dy = particles[j].y - particles[i].y;
 				//Calculating distance squared
 				float dSquared = (dx * dx + dy * dy) + 3e4;
-				//If particles are not together
-				if (dSquared > 0.1f)
-				{
-					//Get inverse distance
-					float distSixth = dSquared * dSquared * dSquared;
-					float inverseDist = 1.0f / sqrtf(distSixth);
-					//Add to velocity
-					vx += dx * inverseDist;
-					vy += dy * inverseDist;
-				}
+				//Get inverse distance
+				float distSixth = dSquared * dSquared * dSquared;
+				float inverseDist = 1.0f / sqrtf(distSixth);
+				//Add to velocity
+				vx += dx * inverseDist;
+				vy += dy * inverseDist;
 			}
 			//Calculate new velocity for original particle and update the particle
 			particles[i].vx += (TIMESTEP * vx * RESISTANCE);
