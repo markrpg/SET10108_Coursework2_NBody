@@ -86,13 +86,14 @@ int main()
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
 
-#pragma omp parallel for num_threads(4)
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
 			//Local velocity variable used to calculate velocity between all other particles
 			float vx = 0.0f;
 			float vy = 0.0f;
+
+#pragma omp parallel for num_threads(4)
 			for (int j = 0; j < PARTICLECOUNT; j++)
 			{
 				//Dont count same particle
@@ -126,13 +127,11 @@ int main()
 		//updateDisplay(window, &particles);
 		//Keep iteration count
 		count++;
-		if (count > 5) {
-			//Output iteration benchmark in ms
-			auto end = std::chrono::high_resolution_clock::now();
-			auto total = roundf((std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 0.000001) * 100) / 100;
-			cout << endl << "Iteration #" << (count) << " Benchmark MS: " << total << endl;
-			data << total << endl;
-		}
+		//Output iteration benchmark in ms
+		auto end = std::chrono::high_resolution_clock::now();
+		auto total = roundf((std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 0.000001) * 100) / 100;
+		cout << endl << "Iteration #" << (count) << " Benchmark MS: " << total << endl;
+		data << total << endl;
 	}
 
 
