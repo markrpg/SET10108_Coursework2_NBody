@@ -20,7 +20,7 @@ using namespace std;
 using namespace std::chrono;
 
 //Global Variables
-constexpr unsigned int PARTICLECOUNT = 4096;
+constexpr unsigned int PARTICLECOUNT = 1024;
 constexpr int ITERATIONS = 100;
 constexpr int SCREENSIZE = 800;
 constexpr float TIMESTEP = 10.0f;
@@ -86,6 +86,7 @@ int main()
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
 
+#pragma omp parallel for num_threads(8) schedule (dynamic)
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
@@ -93,27 +94,19 @@ int main()
 			float vx = 0.0f;
 			float vy = 0.0f;
 
-#pragma omp parallel for num_threads(4)
 			for (int j = 0; j < PARTICLECOUNT; j++)
 			{
-				//Dont count same particle
-				if (i == j)
-					continue;
 				//Get distance from two particles
 				float dx = particles[j].x - particles[i].x;
 				float dy = particles[j].y - particles[i].y;
 				//Calculating distance squared
 				float dSquared = (dx * dx + dy * dy) + 3e4;
-				//If particles are not together
-				if (dSquared > 0.1f)
-				{
-					//Get inverse distance
-					float distSixth = dSquared * dSquared * dSquared;
-					float inverseDist = 1.0f / sqrtf(distSixth);
-					//Add to velocity
-					vx += dx * inverseDist;
-					vy += dy * inverseDist;
-				}
+				//Get inverse distance
+				float distSixth = dSquared * dSquared * dSquared;
+				float inverseDist = 1.0f / sqrtf(distSixth);
+				//Add to velocity
+				vx += dx * inverseDist;
+				vy += dy * inverseDist;
 			}
 			//Calculate new velocity for original particle and update the particle
 			particles[i].vx += (TIMESTEP * vx * RESISTANCE);
