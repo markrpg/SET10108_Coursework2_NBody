@@ -105,7 +105,7 @@ int main()
 	while (window.isOpen() && count < ITERATIONS)
 	{
 		//Start Recording time
-		auto start = system_clock::now();
+		auto start = std::chrono::high_resolution_clock::now();
 
 		auto brute_force = [=](index<1> idx) restrict(amp)
 		{
@@ -124,18 +124,13 @@ int main()
 
 				//Calculating DOT product
 				float dot = (distx * distx + disty * disty) + 3e4;
+				//Get inverse distance
+				float distSixth = dot * dot * dot;
+				float inverseDistance = 1.0f / fast_math::sqrtf(dot);
 
-				//If the dot product is valid
-				if (dot > 0.1f)
-				{
-					//Get inverse distance
-					float distSixth = dot * dot * dot;
-					float inverseDistance = 1.0f / fast_math::sqrtf(dot);
-
-					//Calculate new velocity
-					vx += distx * inverseDistance;
-					vy += disty * inverseDistance;
-				}
+				//Calculate new velocity
+				vx += distx * inverseDistance;
+				vy += disty * inverseDistance;
 			}
 
 			//Update Velocity
@@ -161,10 +156,10 @@ int main()
 		//Keep iteration count
 		count++;
 		//Output iteration benchmark in ms
-		auto end = system_clock::now();
-		auto total = end - start;
-		cout << endl << "Iteration #" << count << " Benchmark MS: " << duration_cast<milliseconds>(total).count() << endl;
-		data << duration_cast<milliseconds>(total).count() << endl;
+		auto end = std::chrono::high_resolution_clock::now();
+		auto total = roundf((std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 0.000001) * 100) / 100;
+		cout << endl << "Iteration #" << (count) << " Benchmark MS: " << total << endl;
+		data << total << endl;
 	}
 
 
