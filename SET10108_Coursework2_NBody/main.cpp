@@ -20,7 +20,7 @@ using namespace Concurrency;
 using namespace Concurrency::fast_math;
 
 //Global Variables
-constexpr unsigned int PARTICLECOUNT = 1024;
+constexpr unsigned int PARTICLECOUNT = 65000;
 constexpr int ITERATIONS = 100;
 constexpr int SCREENSIZE = 800;
 constexpr float TIMESTEP = 10.0f;
@@ -107,15 +107,14 @@ int main()
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
 
+		//Brute force implementation of NBody using C++ AMP
 		auto brute_force = [=](index<1> idx) restrict(amp)
 		{
 
 			//Brute-Force Pair Method - NBod
-
 			//Local velocity variable used to calculate new velocity
 			float vx = 0.0f;
 			float vy = 0.0f;
-
 			for (int ii = 0; ii < PARTICLECOUNT; ii++)
 			{
 				//Get distance from two particles
@@ -148,11 +147,13 @@ int main()
 
 		};
 
+		//Carry out parallel for each on the brute force algorithm
 		parallel_for_each(point_buffer.extent, brute_force);
+		//Synchronize the point buffer containing the particles information
 		point_buffer.synchronize();
 
 		//Update display
-		updateDisplay(window, particles);
+		//updateDisplay(window, particles);
 		//Keep iteration count
 		count++;
 		//Output iteration benchmark in ms
