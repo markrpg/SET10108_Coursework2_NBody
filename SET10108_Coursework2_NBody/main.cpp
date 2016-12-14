@@ -20,7 +20,7 @@ using namespace std;
 using namespace std::chrono;
 
 //Global Variables
-constexpr unsigned int PARTICLECOUNT = 1024;
+constexpr unsigned int PARTICLECOUNT = 512;
 constexpr int ITERATIONS = 100;
 constexpr int SCREENSIZE = 800;
 constexpr float TIMESTEP = 10.0f;
@@ -86,7 +86,7 @@ int main()
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
 
-#pragma omp parallel for num_threads(8) schedule (dynamic)
+#pragma omp parallel for num_threads(4) schedule (dynamic)
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
@@ -127,6 +127,7 @@ int main()
 		data << total << endl;
 	}
 
+	data << "=AVERAGE(A1:A100)";
 
 	//Pause 
 	return 0;
