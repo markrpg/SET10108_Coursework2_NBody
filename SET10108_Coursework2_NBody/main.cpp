@@ -25,7 +25,7 @@ constexpr int ITERATIONS = 100;
 constexpr int SCREENSIZE = 800;
 constexpr float TIMESTEP = 10.0f;
 constexpr float RESISTANCE = 0.99f;
-
+constexpr int CORES_USED = 4;
 struct Particle {
 	float x;
 	float y;
@@ -63,8 +63,6 @@ int main()
 	default_random_engine e(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count());
 	//Uniform distribution
 	uniform_real_distribution<float> float_dist(0, SCREENSIZE);
-	//Get number of supported threads for OpenMP
-	auto num_threads = thread::hardware_concurrency();
 
 	//initialise particles
 	for (int i = 0; i < PARTICLECOUNT; i++)
@@ -86,7 +84,7 @@ int main()
 		//Start Recording time
 		auto start = std::chrono::high_resolution_clock::now();
 
-#pragma omp parallel for num_threads(4) schedule (dynamic)
+#pragma omp parallel for num_threads(CORES_USED) schedule (dynamic)
 		//Brute-Force Pair Method - NBody
 		for (int i = 0; i < PARTICLECOUNT; i++)
 		{
@@ -117,7 +115,7 @@ int main()
 		}
 
 		//Update display
-		//updateDisplay(window, &particles);
+		updateDisplay(window, &particles);
 		//Keep iteration count
 		count++;
 		//Output iteration benchmark in ms
