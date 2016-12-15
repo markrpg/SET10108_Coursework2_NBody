@@ -45,6 +45,7 @@ void print_amp_info()
 	wcout << "Device: " << acc.description << endl;
 	wcout << "Dedicated Memory: " << acc.dedicated_memory / 1024 << " MB" << endl;
 	wcout << "Supports Shared Memory: " << acc.supports_cpu_shared_memory << endl;
+	wcout << "Threads used per Tile: " << THREADS_PER_TILE << endl;
 	system("pause");
 }
 
